@@ -5,15 +5,16 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 // ----------------------------------------------------------------------------
-//
+// 認証.
 // ----------------------------------------------------------------------------
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 var session = require('express-session');
+const USER_NAME = 'test';
+const USER_PASSWORD = 'test';
 // ----------------------------------------------------------------------------
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -28,7 +29,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ----------------------------------------------------------------------------
-//
+// 認証.
 // ----------------------------------------------------------------------------
 app.use(session({ resave:false, saveUninitialized:false, secret:'passport test' }));
 app.use(passport.initialize());
@@ -45,7 +46,7 @@ passport.use(new LocalStrategy(
 	{
 		process.nextTick(function()
 		{
-			if (username === "test" && password === "test") {
+			if (username === USER_NAME && password === USER_PASSWORD) {
 				return done(null, username)
 			} else {
 				console.log("login error")
@@ -62,11 +63,9 @@ passport.serializeUser(function (user, done) {
 passport.deserializeUser(function (user, done) {
 	done(null, user);
 });
-
 // ----------------------------------------------------------------------------
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

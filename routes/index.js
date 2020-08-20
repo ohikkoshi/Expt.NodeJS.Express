@@ -4,12 +4,11 @@ var passport = require('passport');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-	//res.render('index', { title: 'Express' });
 	res.render('index', { user : req.user });
 });
 
 // ----------------------------------------------------------------------------
-// 認証・リダイレクト
+// 認証.
 // ----------------------------------------------------------------------------
 router.get('/login', function(req, res) {
     res.render('login', { user : req.user });
